@@ -1,5 +1,8 @@
 package main
 
+// This file contains an implementation of the Thompson/Pike VM found in
+// "Regular Expression Matching: the Virtual Machine Approach" by Russ Cox.
+
 // go:generate go-bindata -o vm_impl.go $GOFILE
 // 2 * the number of capture groups in a regex
 const NumGroups = NumCaptures / 2

@@ -2,6 +2,14 @@ package main
 
 import "fmt"
 
+// This file compiles a regex into a slice of Inst's. It goes through 3 stages:
+// * `Parse` into a `regexParse`
+// * `compile` into a []*inst -- this generates the initial bytecode, with
+//    pointers for references and including Nop instructions
+// * `finalizeInst` this removes all Nops and resolves pointers to slice indicies
+// Instruction format is based on "Regular Expression Matching: the Virtual
+// Machine Approach" by Russ Cox.
+
 type regexParse interface {
 	compile() []*inst
 }

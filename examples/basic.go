@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-//go:generate ../genregex --pattern=a(a*)bcdef --func=MatchPat --out=pat1.go
+//go:generate ../regen --pattern=a(a*)bcdef --func=MatchPat --out=pat1.go
 
 func main() {
 	ok, capt := MatchPat("aaabcdef")

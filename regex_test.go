@@ -62,8 +62,3 @@ func TestCaptureGroups(t *testing.T) {
 		t.Fail()
 	}
 }
-
-//func TestRegexGen(t *testing.T) {
-//testRegex := "aab*c+ddd"
-//fmt.Println(GenMatcher(testRegex, "TestRegexMatch"))
-//}
