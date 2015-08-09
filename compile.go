@@ -47,14 +47,14 @@ func (r RegexParser) parse(b string, inCapture bool, matchCounter *int) (regexPa
 			}
 			*matchCounter++
 			if i == len(b)-1 {
-				return nil, 0, fmt.Errorf("mismatched parens")
+				return nil, 0, fmt.Errorf("mismatched parens, (")
 			}
 			var rr RegexParser
-			if capt, j, err := rr.parse(b[i+1:], true, matchCounter); err != nil {
+			if capt, j, err := rr.parse(b[i+1:], true, matchCounter); err == nil {
 				capture.field = capt
 				r.rest = append(r.rest, r.prev)
 				r.prev = capture
-				i = j
+				i += j + 1
 			} else {
 				return nil, 0, err
 			}
@@ -64,7 +64,7 @@ func (r RegexParser) parse(b string, inCapture bool, matchCounter *int) (regexPa
 				lastIndex = i
 				goto out
 			} else {
-				return nil, 0, fmt.Errorf("mismatched parens")
+				return nil, 0, fmt.Errorf("mismatched parens, )")
 			}
 		default:
 			if r.prev != nil {

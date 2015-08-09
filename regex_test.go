@@ -36,6 +36,31 @@ func TestRegexBasicMatch(t *testing.T) {
 	}
 }
 
+func TestCaptureGroups(t *testing.T) {
+	testRegex := "ab(a*)b"
+	regexParse := RegexParser{}
+	if parseRegex, err := regexParse.Parse(testRegex); err == nil {
+		inst := finalizeInst(parseRegex.compile())
+		t.Log(testRegex, " -> ", inst)
+		match := "abaaaaaaaaab"
+		if ok, capt := ThompsonVM(inst, match); ok {
+			if capt[0] != "aaaaaaaaa" {
+				t.Logf("pattern %s correctly matched string %s but instead of capturing '%s' captured '%s'",
+					testRegex, match, "aaaaaaaaa", capt[0])
+				t.Fail()
+			} else {
+				t.Log("Success")
+			}
+		} else {
+			t.Logf("pattern [%s] failed to match string: '%s'", testRegex, match)
+			t.Fail()
+		}
+	} else {
+		t.Logf("Failed to parse regex %s: %v", testRegex, err)
+		t.Fail()
+	}
+}
+
 //func TestRegexGen(t *testing.T) {
 //testRegex := "aab*c+ddd"
 //GenMatcher(testRegex, "TestRegexMatch")

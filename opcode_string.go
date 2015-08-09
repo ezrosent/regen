@@ -4,9 +4,9 @@ package genregex
 
 import "fmt"
 
-const _OpCode_name = "CharMatchJumpSplitNop"
+const _OpCode_name = "CharMatchJumpSplitSaveNop"
 
-var _OpCode_index = [...]uint8{0, 4, 9, 13, 18, 21}
+var _OpCode_index = [...]uint8{0, 4, 9, 13, 18, 22, 25}
 
 func (i OpCode) String() string {
 	if i+1 >= OpCode(len(_OpCode_index)) {
