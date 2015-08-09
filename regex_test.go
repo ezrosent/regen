@@ -1,10 +1,12 @@
-package genregex
+package main
 
 import "testing"
 
+const NumCaptures = 20
+
 func TestRegexBasicMatch(t *testing.T) {
 	testRegex := "aab*"
-	regexParse := RegexParser{}
+	regexParse := regexParser{}
 	if parseRegex, err := regexParse.Parse(testRegex); err == nil {
 		inst := finalizeInst(parseRegex.compile())
 		t.Log(testRegex, " -> ", inst)
@@ -38,7 +40,7 @@ func TestRegexBasicMatch(t *testing.T) {
 
 func TestCaptureGroups(t *testing.T) {
 	testRegex := "ab(a*)b"
-	regexParse := RegexParser{}
+	regexParse := regexParser{}
 	if parseRegex, err := regexParse.Parse(testRegex); err == nil {
 		inst := finalizeInst(parseRegex.compile())
 		t.Log(testRegex, " -> ", inst)
@@ -63,5 +65,5 @@ func TestCaptureGroups(t *testing.T) {
 
 //func TestRegexGen(t *testing.T) {
 //testRegex := "aab*c+ddd"
-//GenMatcher(testRegex, "TestRegexMatch")
+//fmt.Println(GenMatcher(testRegex, "TestRegexMatch"))
 //}

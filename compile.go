@@ -1,4 +1,4 @@
-package genregex
+package main
 
 import "fmt"
 
@@ -6,19 +6,19 @@ type regexParse interface {
 	compile() []*inst
 }
 
-type RegexParser struct {
+type regexParser struct {
 	prev regexParse
 	rest []regexParse
 }
 
-func (r RegexParser) Parse(b string) (regexParse, error) {
+func (r regexParser) Parse(b string) (regexParse, error) {
 	c := 0
 	rp, _, err := r.parse(b, false, &c)
 	return rp, err
 }
 
 //TODO(ezrosent) support escaping
-func (r RegexParser) parse(b string, inCapture bool, matchCounter *int) (regexParse, int, error) {
+func (r regexParser) parse(b string, inCapture bool, matchCounter *int) (regexParse, int, error) {
 	errorStr := func(r rune) error {
 		return fmt.Errorf("must have previous regex before using metacharacter %c", r)
 	}
@@ -49,7 +49,7 @@ func (r RegexParser) parse(b string, inCapture bool, matchCounter *int) (regexPa
 			if i == len(b)-1 {
 				return nil, 0, fmt.Errorf("mismatched parens, (")
 			}
-			var rr RegexParser
+			var rr regexParser
 			if capt, j, err := rr.parse(b[i+1:], true, matchCounter); err == nil {
 				capture.field = capt
 				r.rest = append(r.rest, r.prev)
@@ -169,7 +169,7 @@ type Inst struct {
 }
 
 func (i Inst) String() string {
-	return fmt.Sprintf("Inst{%s, %c, %d, %d}", i.Op.String(), i.Char, i.Label1, i.Label2)
+	return fmt.Sprintf("Inst{%v, %c, %d, %d}", i.Op, i.Char, i.Label1, i.Label2)
 }
 
 func nextLabel(instructs []*inst, inst *inst) *inst {
@@ -178,9 +178,8 @@ func nextLabel(instructs []*inst, inst *inst) *inst {
 	// hopefully cannot get a nop cycle...
 	if ret.op == Nop {
 		return nextLabel(instructs, ret)
-	} else {
-		return ret
 	}
+	return ret
 }
 
 func finalizeInst(instructs []*inst) []Inst {

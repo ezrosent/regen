@@ -1,7 +1,7 @@
-package genregex
+package main
 
+// go:generate go-bindata -o vm_impl.go $GOFILE
 // 2 * the number of capture groups in a regex
-const NumCaptures = 20
 const NumGroups = NumCaptures / 2
 
 type Thread struct {
@@ -12,10 +12,9 @@ type Thread struct {
 func insertKey(list []Thread, set map[int64]bool, t Thread) ([]Thread, map[int64]bool) {
 	if set[t.pc] {
 		return list, set
-	} else {
-		set[t.pc] = true
-		return append(list, t), set
 	}
+	set[t.pc] = true
+	return append(list, t), set
 }
 
 func ThompsonVM(in []Inst, input string) (bool, []string) {
